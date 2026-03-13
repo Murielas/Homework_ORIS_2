@@ -12,8 +12,8 @@ public class Application {
 
         UserService userService = appContext.getBean(UserService.class);
         userService.saveNewUser("Аня");
-        userService.changeName(1L, "Ина");
+        userService.changeName(userService.getUserByName("Аня").get().getId(), "Ина");
         userService.getUserByName("Ина");
-        userService.deleteUser(1L);
+        userService.deleteUser(userService.getUserByName("Ина").get().getId());
     }
 }
