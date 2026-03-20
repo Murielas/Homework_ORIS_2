@@ -3,6 +3,8 @@ package ru.itis;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import ru.itis.persistence.entity.UserEntity;
+import ru.itis.service.PostService;
 import ru.itis.service.UserService;
 
 @SpringBootApplication
@@ -11,9 +13,9 @@ public class Application {
         ApplicationContext appContext = SpringApplication.run(Application.class, args);
 
         UserService userService = appContext.getBean(UserService.class);
-        userService.saveNewUser("Аня");
-        userService.changeName(userService.getUserByName("Аня").get().getId(), "Ина");
-        userService.getUserByName("Ина");
-        userService.deleteUser(userService.getUserByName("Ина").get().getId());
+        PostService postService = appContext.getBean(PostService.class);
+        UserEntity user1 = userService.saveNewUser("Аня");
+        userService.changeName(user1.getId(), "Ина");
+        postService.saveNewPost(user1.getId(), "Приветствие", "Это мой первый пост");
     }
 }

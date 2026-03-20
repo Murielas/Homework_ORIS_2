@@ -1,10 +1,11 @@
 package ru.itis.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.itis.persistence.entity.UserEntity;
 import ru.itis.persistence.entity.UserStatus;
-import ru.itis.persistence.repository.JdbcUserRepositoryImpl;
+import ru.itis.persistence.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -12,40 +13,34 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final JdbcUserRepositoryImpl userRepository;
+    private final UserRepository userRepository;
 
-    public void saveNewUser(String name) {
-        if (userRepository.getByName(name) != null) {
-            System.out.println("Имя занято");
-            return;
-        }
-
+    @Transactional
+    public UserEntity saveNewUser(String name) {
         UserEntity user = UserEntity.builder()
                 .name(name)
                 .status(UserStatus.REGISTERED)
                 .build();
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
-    public Optional<UserEntity> getUserByName(String name) {
-        return userRepository.getByName(name);
-    }
-
+    @Transactional
     public void changeName(UUID id, String name) {
-        Optional<UserEntity> user = userRepository.getById(id);
+        Optional<UserEntity> user = userRepository.findById(id);
 
-        if (!userRepository.getByName(name).isEmpty() && !user.isEmpty()) {
+        if (!user.isEmpty()) {
             UserEntity userEntity = user.get();
             userEntity.setName(name);
-            userRepository.update(userEntity);
+            userRepository.save(userEntity);
         } else {
-            System.out.println("Не удалось изменнить имя");
+            System.out.println("Не удалось изменить имя");
         }
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
-        if (!userRepository.getById(id).isEmpty()) {
+        if (!userRepository.findById(id).isEmpty()) {
             userRepository.deleteById(id);
         } else {
             System.out.println("Пользователя не существует");
