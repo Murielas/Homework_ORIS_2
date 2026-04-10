@@ -1,11 +1,10 @@
-package ru.itis.api;
+package ru.itis.api.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.service.UserService;
 
-@Controller
+@RestController
 @RequestMapping("/test")
 @RequiredArgsConstructor
 public class TestController {

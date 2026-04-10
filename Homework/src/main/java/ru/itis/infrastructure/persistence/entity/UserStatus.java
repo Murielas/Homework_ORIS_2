@@ -1,4 +1,4 @@
-package ru.itis.persistence.entity;
+package ru.itis.infrastructure.persistence.entity;
 
 public enum UserStatus {
     REGISTERED,

@@ -3,8 +3,8 @@ package ru.itis.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.itis.persistence.entity.PostEntity;
-import ru.itis.persistence.repository.PostRepository;
+import ru.itis.infrastructure.persistence.entity.PostEntity;
+import ru.itis.infrastructure.persistence.repository.PostRepository;
 
 import java.util.UUID;
 

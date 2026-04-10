@@ -1,11 +1,11 @@
-package ru.itis.persistence.repository;
+package ru.itis.infrastructure.persistence.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
-import ru.itis.persistence.entity.PostEntity;
-import ru.itis.persistence.entity.UserEntity;
+import ru.itis.infrastructure.persistence.entity.PostEntity;
+import ru.itis.infrastructure.persistence.entity.UserEntity;
 
 import java.util.UUID;
 

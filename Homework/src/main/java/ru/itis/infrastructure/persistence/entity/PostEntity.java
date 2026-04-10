@@ -1,4 +1,4 @@
-package ru.itis.persistence.entity;
+package ru.itis.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,5 +20,8 @@ public class PostEntity extends OrisBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private UserEntity author;
+
+    // @ManyToMany(mappedBy = "likes")
+    // private List<UserEntity> liked;
 }
 

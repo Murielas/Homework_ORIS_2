@@ -1,5 +1,6 @@
-package ru.itis.persistence.entity;
+package ru.itis.infrastructure.persistence.entity;
 
+import jakarta.annotation.PreDestroy;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,9 @@ public abstract class OrisBaseEntity {
     @Column(name = "last_action_dt", nullable = false)
     LocalDateTime lastActionDt;
 
+    @Column(name = "deleted_dt")
+    LocalDateTime deletedDt;
+
     @PrePersist
     protected void prePersist() {
         if (Objects.isNull(id)) {
@@ -30,10 +34,16 @@ public abstract class OrisBaseEntity {
         LocalDateTime now = LocalDateTime.now();
         setCreationDt(now);
         setLastActionDt(now);
+        setDeletedDt(null);
     }
 
     @PreUpdate
     protected void preUpdate() {
         setLastActionDt(LocalDateTime.now());
+    }
+
+    @PreDestroy
+    protected void preDestroy() {
+        setDeletedDt(LocalDateTime.now());
     }
 }

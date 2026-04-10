@@ -1,11 +1,13 @@
 package ru.itis.service;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.itis.persistence.entity.UserEntity;
-import ru.itis.persistence.entity.UserStatus;
-import ru.itis.persistence.repository.UserRepository;
+import ru.itis.api.dto.RegistrationDTO;
+import ru.itis.infrastructure.persistence.entity.UserEntity;
+import ru.itis.infrastructure.persistence.entity.UserStatus;
+import ru.itis.infrastructure.persistence.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -15,10 +17,18 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
-    public UserEntity saveNewUser(String name) {
+    public UserEntity saveNewUser(RegistrationDTO regDTO) {
+        if (userRepository.findByUsername(regDTO.getUsername()).isPresent()) {
+            throw new RuntimeException("Такой пользователь уже существует");
+        }
+
         UserEntity user = UserEntity.builder()
-                .name(name)
+                .username(regDTO.getUsername())
+                .password(passwordEncoder.encode(regDTO.getPassword()))
+                .role(UserEntity.UserRole.USER)
                 .status(UserStatus.REGISTERED)
                 .build();
 
@@ -31,7 +41,7 @@ public class UserService {
 
         if (!user.isEmpty()) {
             UserEntity userEntity = user.get();
-            userEntity.setName(name);
+            userEntity.setUsername(name);
             userRepository.save(userEntity);
         } else {
             System.out.println("Не удалось изменить имя");
